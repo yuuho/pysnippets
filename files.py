@@ -126,7 +126,7 @@ def findFR(path,pattern):
                     if re.search(pattern,str(item)) and not item.is_dir()]
     return matchitem
 
-def findFR(path,pattern):
+def findFC(path,pattern):
     allitem = list(path.glob('*'))
     matchitem = [item for item in allitem
                     if re.search(pattern,str(item)) and not item.is_dir()]
