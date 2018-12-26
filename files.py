@@ -58,6 +58,13 @@ def mkdirH(path):
 def mkdirS(path):
     path.mkdir(parents=True,exist_ok=True)
 
+'''
+# python2.7のときはpathlibにexist_okオプションがないので以下のようにする．
+def mkdirS(path):
+    if not path.exists():
+        path.mkdir(parents=True)
+'''
+
 # ディレクトリやファイルを消す
 def rm(path):
     # 消す対象が存在するとき，ディレクトリかファイルか判断して消す
