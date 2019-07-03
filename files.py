@@ -128,13 +128,13 @@ def mvS(src,dst):
 def findFR(path,pattern):
     allitem = list(path.rglob('*'))
     matchitem = [item for item in allitem
-                    if re.search(pattern,str(item)) and not item.is_dir()]
+                    if re.search(pattern,str(item)) and item.is_file()]
     return matchitem
 
 def findFC(path,pattern):
     allitem = list(path.glob('*'))
     matchitem = [item for item in allitem
-                    if re.search(pattern,str(item)) and not item.is_dir()]
+                    if re.search(pattern,str(item)) and item.is_file()]
     return matchitem
 
 def findDR(path,pattern):
@@ -169,8 +169,8 @@ def find(path,pattern):
 
 # ちゃんとモードを意識するなら
 
-# fc [item for item in list(path.glob('*')) if re.search(pattern,str(item)) and not item.is_dir()]
-# fr [item for item in list(path.rglob('*')) if re.search(pattern,str(item)) and not item.is_dir()]
+# fc [item for item in list(path.glob('*')) if re.search(pattern,str(item)) and item.is_file()]
+# fr [item for item in list(path.rglob('*')) if re.search(pattern,str(item)) and item.is_file()]
 # dc [item for item in list(path.glob('*')) if re.search(pattern,str(item)) and item.is_dir()]
 # dr [item for item in list(path.rglob('*')) if re.search(pattern,str(item)) and item.is_dir()]
 # ac [item for item in list(path.glob('*')) if re.search(pattern,str(item))]
@@ -183,7 +183,7 @@ def find(path, pattern, mode='fc'):
     listing_func = [lambda path: list(path.glob('*')),
                     lambda path: list(path.rglob('*'))][
                         ('c','r').index(mode[1])]
-    filter_func = [lambda item: not item.is_dir(),
+    filter_func = [lambda item: item.is_file(),
                     lambda item: item.is_dir(),
                     lambda item: True ][
                         ('f','d','a').index(mode[0])]
