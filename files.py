@@ -124,8 +124,6 @@ def mvS(src,dst):
 
 
 # 以下，全て条件式がちょっと違うだけ
-# ワンライナーで書くならこれが楽かも(正規表現でスラッシュや拡張子の有無を見ればほぼ対応できるので)
-# [item for item in list(path.rglob('*')) if re.search(pattern,str(item))]
 
 def findFR(path,pattern):
     allitem = list(path.rglob('*'))
@@ -162,3 +160,35 @@ def findAC(path,pattern):
     matchitem = [item for item in allitem
                     if re.search(pattern,str(item))]
     return matchitem
+
+# 拡張子の有無でファイルかディレクトリか判断するのであれば
+# 正規表現の方で調整してこれですべて調べられる
+def find(path,pattern):
+    return [item for item in list(path.rglob('*')) if re.search(pattern,str(item))]
+
+
+# ちゃんとモードを意識するなら
+
+# fc [item for item in list(path.glob('*')) if re.search(pattern,str(item)) and not item.is_dir()]
+# fr [item for item in list(path.rglob('*')) if re.search(pattern,str(item)) and not item.is_dir()]
+# dc [item for item in list(path.glob('*')) if re.search(pattern,str(item)) and item.is_dir()]
+# dr [item for item in list(path.rglob('*')) if re.search(pattern,str(item)) and item.is_dir()]
+# ac [item for item in list(path.glob('*')) if re.search(pattern,str(item))]
+# ar [item for item in list(path.rglob('*')) if re.search(pattern,str(item))]
+
+'''
+# 読みやすさのため
+def find(path, pattern, mode='fc'):
+    assert mode[0] in ('f','d','a') and mode[1] in ('c','r'), 'find mode error'
+    listing_func = [lambda path: list(path.glob('*')),
+                    lambda path: list(path.rglob('*'))][
+                        ('c','r').index(mode[1])]
+    filter_func = [lambda item: not item.is_dir(),
+                    lambda item: item.is_dir(),
+                    lambda item: True ][
+                        ('f','d','a').index(mode[0])]
+    allitem = listing_func(path)
+    matchitem = [item for item in allitem
+                    if re.search(pattern,str(item)) and filter_func(item)]
+    return matchitem
+'''
