@@ -180,13 +180,11 @@ def find(path,pattern):
 # 読みやすさのため
 def find(path, pattern, mode='fc'):
     assert mode[0] in ('f','d','a') and mode[1] in ('c','r'), 'find mode error'
-    listing_func = [lambda path: list(path.glob('*')),
-                    lambda path: list(path.rglob('*'))][
-                        ('c','r').index(mode[1])]
-    filter_func = [lambda item: item.is_file(),
-                    lambda item: item.is_dir(),
-                    lambda item: True ][
-                        ('f','d','a').index(mode[0])]
+    listing_func = {'c': lambda path: list(path.glob('*')),
+                    'r': lambda path: list(path.rglob('*')) }[mode[1]]
+    filter_func = { 'f': lambda item: item.is_file(),
+                    'd': lambda item: item.is_dir(),
+                    'a': lambda item: True              }[mode[0]]
     allitem = listing_func(path)
     matchitem = [item for item in allitem
                     if re.search(pattern,str(item)) and filter_func(item)]
