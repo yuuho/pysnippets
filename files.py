@@ -51,7 +51,7 @@ C : 指定したディレクトリのみ
 # ディレクトリの作成(既に存在する場合上書き)
 def mkdirH(path):
     # 既に存在していたら消す
-    shutil.rmtree(str(path),ignore_errors=True)
+    shutil.rmtree(path,ignore_errors=True)
     path.mkdir(parents=True)
 
 # ディレクトリの作成(既に存在する場合無視)
@@ -70,7 +70,7 @@ def rm(path):
     # 消す対象が存在するとき，ディレクトリかファイルか判断して消す
     if path.exists():
         if path.is_dir():
-            shutil.rmtree(str(path))
+            shutil.rmtree(path)
         else:
             path.unlink()
 
@@ -80,9 +80,9 @@ def cpH(src,dst):
     # ディレクトリかファイルかの判定．ディレクトリならツリーで
     if src.is_dir():
         # 既にあるなら消す
-        shutil.rmtree(str(dst),ignore_errors=True)
+        shutil.rmtree(dst,ignore_errors=True)
         #ツリーごとコピー
-        shutil.copytree(str(src),str(dst))
+        shutil.copytree(src,dst)
     else:
         # 既にあるなら消す
         if dst.exists():
@@ -90,7 +90,7 @@ def cpH(src,dst):
         # 途中のパスがそんざいしないなら作る
         dst.parent.mkdir(parents=True,exist_ok=True)
         #ファイルをコピー
-        shutil.copy(str(src),str(dst))
+        shutil.copy(src,dst)
 
 # ファイル・ディレクトリのコピー
 #   src:ファイル名, dst:ファイル名
@@ -101,26 +101,26 @@ def cpS(src,dst):
     # ディレクトリかファイルかの判定．ディレクトリならツリーで
     if src.is_dir():
         #ツリーごとコピー
-        shutil.copytree(str(src),str(dst))
+        shutil.copytree(src,dst)
     else:
         # 途中のパスがそんざいしないなら作る
         dst.parent.mkdir(parents=True,exist_ok=True)
         #ファイルをコピー
-        shutil.copy(str(src),str(dst))
+        shutil.copy(src,dst)
 
 def mvH(src,dst):
     # 存在するなら消す(ファイルの場合，macなら消さなくても上書きになるがwinはわからない)
     if dst.exists():
         if path.is_dir():
-            shutil.rmtree(str(dst))
+            shutil.rmtree(dst)
         else:
             path.unlink()
-    shutil.move(str(src),str(dst))
+    shutil.move(src,dst)
 
 def mvS(src,dst):
     if dst.exists():
         return
-    shutil.move(str(src),str(dst))
+    shutil.move(src,dst)
 
 
 # 以下，全て条件式がちょっと違うだけ
