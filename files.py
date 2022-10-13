@@ -190,3 +190,16 @@ def find(path, pattern, mode='fc'):
                     if re.search(pattern,str(item)) and filter_func(item)]
     return matchitem
 '''
+
+
+if __name__ == '__main__':
+    # 使用例
+    root_path = Path('hogehoge')
+
+    # png形式のファイルだけ検索
+    paths = findAR(root_path,r'^.*\/[^/]+\.png$')
+    # png形式のファイルで隠しファイルのもの以外
+    paths = findAR(root_path,r'^.*\/[^.][^/]*\.png$')
+
+    # 表示
+    [print(str(p)) for p in paths]

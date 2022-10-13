@@ -198,7 +198,7 @@ def main():
 
 
     print('##### command 9 #####')
-    command = 'python sample2.py'
+    command = 'python etc/sample2.py'
     try:
         print('■ SUCCESS: %s\n'%command, bash_command_timeoutable(command, 2 ) )
     except:
@@ -206,7 +206,7 @@ def main():
 
 
     print('##### command 10 #####')
-    command = 'python sample2.py'
+    command = 'python etc/sample2.py'
     try:
         print('■ SUCCESS: %s\n'%command, basic_command_timeoutable(command, 2 ) )
     except:
