@@ -1,4 +1,14 @@
 
+'''
+## メモ
+
+動画作成の際、matplotlib.pyplot で大量の画像を作成するのはやらないほうが良い。
+pyplot はメモリの管理がおかしいのでどこかで崩壊しがち。
+毎回 ``.savefig()`` -> ``.close()`` -> ``.clf()`` -> ``.cla()`` をすると、
+問題なくメモリ解放されて正しくレンダリングされることが多いが、
+とても遅いので、素直に object-oriented API を使用したほうが良い。
+plt は import 自体しないこと。
+'''
 
 
 import io
@@ -6,7 +16,7 @@ from pathlib import Path
 
 import tqdm
 import numpy as np
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 import cv2
 
 
@@ -29,7 +39,8 @@ class VideoFrames:
         T,H,W,C = self.shape
         dpi = 180
         figsize_inch = np.array([W,H]) / dpi
-        fig, sbplt = plt.subplots(1,1, figsize=figsize_inch, dpi=dpi)
+        fig = Figure(figsize=figsize_inch, dpi=dpi)
+        sbplt = fig.add_subplot(1,1,1)
 
         sample = 100
         x = np.linspace(0,10, sample)
@@ -40,7 +51,6 @@ class VideoFrames:
         with io.BytesIO() as buf:
             fig.savefig( buf, format="png", dpi=dpi )
             frame = cv2.imdecode( np.frombuffer( buf.getvalue(), dtype=np.uint8 ), 1)
-        plt.close()
         return frame
 
 
@@ -52,7 +62,7 @@ def main():
     rad_per_sec = 2*np.pi
     rad_per_frame = rad_per_sec/fps
 
-    # 1
+    # 1: numpy で作成した画像シーケンスを書き出す。
     frames = np.empty((T,H,W,C),dtype=np.uint8)
     grid = np.mgrid[:H,:W].transpose(1,2,0)
     r = min(H,W)*0.4
@@ -64,7 +74,7 @@ def main():
         frames[t] = np.c_[d,d,d]
     write_video( frames, Path('/tmp/sample1.mp4'), fps=fps)
 
-    # 2
+    # 2: matplotlib で作成した画像シーケンスを書き出す。
     data = np.arange(T)*rad_per_frame
     write_video( VideoFrames(data,H,W), Path('/tmp/sample2.mp4'), fps=fps)
 
